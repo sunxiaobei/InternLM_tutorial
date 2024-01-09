@@ -49,7 +49,7 @@
 
 
 相关资料：
-第1节课教程视频：https://www.bilibili.com/video/BV1Rc411b7ns
-OpenXLab：https://studio.intern-ai.org.cn
-学习手册：https://kvudif1helh.feishu.cn/docx/Xx8hdqGwmopi5NxWxNWc76AOnPf
+- 第1节课教程视频：https://www.bilibili.com/video/BV1Rc411b7ns
+- OpenXLab：https://studio.intern-ai.org.cn
+- 学习手册：https://kvudif1helh.feishu.cn/docx/Xx8hdqGwmopi5NxWxNWc76AOnPf
 
