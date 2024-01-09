@@ -184,6 +184,7 @@ streamlit run web_demo.py --server.address 127.0.0.1 --server.port 6066
 ```
 cd /root/code
 git clone https://gitee.com/internlm/lagent.git
+
 cd /root/code/lagent
 git checkout 511b03889010c4811b1701abb153e02b8e94fb5e # 尽量保证和教程commit版本一致
 pip install -e . # 源码安装
@@ -419,31 +420,72 @@ streamlit run /root/code/lagent/examples/react_web_demo.py --server.address 127.
 - 浏览器访问
 - 选择 `InternLM` 模型，进行测试
 
-```
+
+![Alt text](imgs/internln_lagent_demo_test_math.png)
+![Alt text](imgs/internln_lagent_demo_test_math2.png)
 
 
-```
+
 
 ## 浦语 灵笔 图文创作理解Demo
 ![Alt text](imgs/internlm_xcomposer-7b.png)
+- 开发机升级： A100(1/4) * 2 机器和 `internlm-xcomposer-7b` 模型部署一个图文理解创作 Demo
 
-## 通用环境配置
-- 登录OpenXlab：https://studio.intern-ai.org.cn
-### Pip、Conda换源
-- pip默认源、升级
-  
-```
+### 环境准备
+- A100(1/4)*2 
+- 环境配置
 
 ```
-- Conda 配置源
+bash
+# 进入 `conda` 环境之后，使用以下命令从本地克隆一个已有的`pytorch 2.0.1` 的环境
+/root/share/install_conda_env_internlm_base.sh xcomposer-demo
 
-```
+# 激活环境
+conda activate xcomposer-demo
 
-```
+# 安装包
+pip install transformers==4.33.1 timm==0.4.12 sentencepiece==0.1.99 gradio==3.44.4 markdown2==2.4.10 xlsxwriter==3.1.2 einops accelerate
+
+``` 
 
 ### 模型下载
+- 方式一、直接复制已有模型
+```
+mkdir -p /root/model/Shanghai_AI_Laboratory
+cp -r /root/share/temp/model_repos/internlm-xcomposer-7b /root/model/Shanghai_AI_Laboratory
+```
+- 方式二、modelcope下载
 
+```
+pip install modelscope==1.9.5
+```
+在 `/root/model` 路径下新建 `download.py` 文件并在其中输入以下内容，并运行 `python /root/model/download.py` 执行下载
+```
+import torch
+from modelscope import snapshot_download, AutoModel, AutoTokenizer
+import os
+model_dir = snapshot_download('Shanghai_AI_Laboratory/internlm-xcomposer-7b', cache_dir='/root/model', revision='master')
+```
+### 代码准备
+```
+cd /root/code
+git clone https://gitee.com/internlm/InternLM-XComposer.git
 
+cd /root/code/InternLM-XComposer
+git checkout 3e8c79051a1356b9c388a6447867355c0634932d  # 最好保证和教程的 commit 版本一致
+```
+### 运行Demo
+```
+cd /root/code/InternLM-XComposer
+python examples/web_demo.py  \
+    --folder /root/model/Shanghai_AI_Laboratory/internlm-xcomposer-7b \
+    --num_gpus 1 \
+    --port 6006
+
+```
+- 这里 `num_gpus 1` 是因为InternStudio平台对于 `A100(1/4)*2` 识别仍为一张显卡。但如果有小伙伴课后使用两张 3090 来运行此 demo，仍需将 `num_gpus` 设置为 `2` 。
+
+![Alt text](imgs/internlm_xcomposer_7b_run.png)
 
 
 课程资料：

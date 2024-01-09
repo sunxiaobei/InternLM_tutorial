@@ -1,5 +1,5 @@
 # Day02 作业
-
+## 基础作业
 - 使用 InternLM-Chat-7B 模型生成 300 字的小故事（需截图）
 
 ![Alt text](imgs/internlm_chat_7b_demo_test.png)
@@ -22,3 +22,17 @@ from huggingface_hub import hf_hub_download  # Load model directly
 hf_hub_download(repo_id="internlm/internlm-7b", filename="config.json")
 ```
 ![Alt text](imgs/internlm-7b-huggingface-download.png)
+
+## 进阶作业
+
+- 完成 Lagent 工具调用 Demo 创作部署（需截图）
+
+![Alt text](imgs/internln_lagent_demo_test_math.png)
+
+![Alt text](imgs/internln_lagent_demo_test_math2.png)
+
+- 完成浦语·灵笔的图文理解及创作部署（需截图）
+
+![Alt text](imgs/internlm_xcomposer_7b_run.png)
+
+![Alt text](imgs/internlm_xcomposer_7b_running.png)

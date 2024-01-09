@@ -755,7 +755,7 @@ download(model_repo='OpenLMLab/InternLM-7b', model_name='InternLM-7b', output='y
 
 **进阶作业（可选做）**
 
-- 完成浦语·灵笔的图文理解及创作部署（需截图）
+- 完成浦语·灵笔的图文理解及创作部署（需截图） 
 - 完成 Lagent 工具调用 Demo 创作部署（需截图）
 
 **整体实训营项目：**
