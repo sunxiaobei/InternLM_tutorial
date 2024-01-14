@@ -20,6 +20,7 @@
     - [4.2 实例化自定义 LLM 与 Prompt Template](#42-实例化自定义-llm-与-prompt-template)
     - [4.3 构建检索问答链](#43-构建检索问答链)
   - [5 部署 Web Demo](#5-部署-web-demo)
+  - [6 作业](#6-作业)
 
 
 ## 1 环境配置
@@ -135,7 +136,7 @@ os.environ['HF_ENDPOINT'] = 'https://hf-mirror.com'
 os.system('huggingface-cli download --resume-download sentence-transformers/paraphrase-multilingual-MiniLM-L12-v2 --local-dir /root/data/model/sentence-transformer')
 ```
 
-然后，在 `\root\data` 目录下执行该脚本即可自动开始下载：
+然后，在 `/root/data` 目录下执行该脚本即可自动开始下载：
 
 ```bash
 python download_hf.py
