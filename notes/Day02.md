@@ -446,7 +446,7 @@ conda activate xcomposer-demo
 # 安装包
 pip install transformers==4.33.1 timm==0.4.12 sentencepiece==0.1.99 gradio==3.44.4 markdown2==2.4.10 xlsxwriter==3.1.2 einops accelerate
 
-``` 
+```
 
 ### 模型下载
 - 方式一、直接复制已有模型
@@ -487,8 +487,19 @@ python examples/web_demo.py  \
 
 ![Alt text](imgs/internlm_xcomposer_7b_run.png)
 
+```
+wget https://cdn-media.huggingface.co/frpc-gradio-0.2/frpc_linux_amd64
+```
+
+
 
 课程资料：
+
+- 课程视频：https://www.bilibili.com/video/BV1Rc411b7ns
+- OpenXLab：https://studio.intern-ai.org.cn
+- 学习手册：https://kvudif1helh.feishu.cn/docx/Xx8hdqGwmopi5NxWxNWc76AOnPf
+
+
 
 - 基于大模型搭建金融场景智能问答系统：https://github.com/Tongyi-EconML/FinQwen
 - 天池LLM大模型：https://tianchi.aliyun.com/competition/entrance/532172
