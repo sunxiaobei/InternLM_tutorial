@@ -18,7 +18,7 @@
 - ......
 - [Zephyr](https://huggingface.co/HuggingFaceH4/zephyr-7b-beta) 
 
-### 1.3 特色 
+### 1.3 特色
 
 - 🤓 **傻瓜化：** 以 配置文件 的形式封装了大部分微调场景，**0基础的非专业人员也能一键开始微调**。
 - 🍃 **轻量级：** 对于 7B 参数量的LLM，**微调所需的最小显存仅为 8GB** ： **消费级显卡✅，colab✅**
@@ -36,7 +36,6 @@
 - **[QLoRA](http://arxiv.org/abs/2305.14314)** :   😳 → 🏍
 
 ![WOZJXUtaKlEk9S4.png](imgs/cat_fly.png)
-
 
 ## 2 快速上手
 
@@ -113,7 +112,6 @@ xtuner copy-cfg internlm_chat_7b_qlora_oasst1_e3 .
 | 把数据集跑几次    | 跑3次：e3 (epoch 3 )   |
 
 *无 chat比如 `internlm-7b` 代表是基座(base)模型
-
 
 #### 2.3.2 模型下载
 
@@ -727,7 +725,6 @@ nvidia-cuda-runtime-cu12      12.1.105
 
 **微调前**（回答比较官方）
 ![web_show_2.png](imgs%2Fweb_show_2.png)
-
 
 **微调后**（对自己的身份有了清晰的认知）
 ![web_show_1.png](imgs%2Fweb_show_1.png)
