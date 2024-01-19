@@ -55,9 +55,6 @@
 ![image-20240114112631927](assets/Day03/image-20240114112631927.png)
 
 
-
-
-
 课程资料：
 
 - 课程视频：https://www.bilibili.com/video/BV1Rc411b7ns
