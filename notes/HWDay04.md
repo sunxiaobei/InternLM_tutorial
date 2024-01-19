@@ -252,7 +252,7 @@ NPROC_PER_NODE=${GPU_NUM} xtuner train ./internlm_chat_7b_qlora_oasst1_e3_copy.p
         `-- last_checkpoint
 ```
 
-#### 2.3.6 将得到的 PTH 模型转换为 HuggingFace 模型，**即：生成 Adapter 文件夹**
+#### 将得到的 PTH 模型转换为 HuggingFace 模型，**即：生成 Adapter 文件夹**
 
 `xtuner convert pth_to_hf ${CONFIG_NAME_OR_PATH} ${PTH_file_dir} ${SAVE_PATH}`
 
@@ -299,9 +299,9 @@ xtuner convert pth_to_hf ./internlm_chat_7b_qlora_oasst1_e3_copy.py ./work_dirs/
 
 
 
-### 2.4 部署与测试
+### 部署与测试
 
-#### 2.4.1 将 HuggingFace adapter 合并到大语言模型：
+#### 将 HuggingFace adapter 合并到大语言模型：
 
 ```Bash
 xtuner convert merge ./internlm-chat-7b ./hf ./merged --max-shard-size 2GB
@@ -312,7 +312,7 @@ xtuner convert merge ./internlm-chat-7b ./hf ./merged --max-shard-size 2GB
 #     --max-shard-size 2GB
 ```
 
-#### 2.4.2 与合并后的模型对话：
+####  与合并后的模型对话：
 
 ```Bash
 # 加载 Adapter 模型对话（Float 16）
@@ -322,7 +322,7 @@ xtuner chat ./merged --prompt-template internlm_chat
 # xtuner chat ./merged --bits 4 --prompt-template internlm_chat
 ```
 
-#### 2.4.3 Demo
+####  Demo
 
 - 修改 `cli_demo.py` 中的模型路径
 
@@ -362,24 +362,24 @@ python ./cli_demo.py
 
 
 
-## 3 自定义微调
+## 自定义微调
 
 > 以 **[Medication QA](https://github.com/abachaa/Medication_QA_MedInfo2019)** **数据集**为例
 
-### 3.1 概述
+### 概述
 
-#### 3.1.1 **场景需求**
+#### **场景需求**
 
    基于 InternLM-chat-7B 模型，用 MedQA 数据集进行微调，将其往`医学问答`领域对齐。
 
-#### 3.1.2 **真实数据预览**
+#### **真实数据预览**
 
 | 问题                                                       | 答案                                                         |
 | ---------------------------------------------------------- | ------------------------------------------------------------ |
 | What are ketorolac eye drops?（什么是酮咯酸滴眼液？）      | Ophthalmic   ketorolac is used to treat itchy eyes caused by allergies. It also is used to   treat swelling and redness (inflammation) that can occur after cataract   surgery. Ketorolac is in a class of medications called nonsteroidal   anti-inflammatory drugs (NSAIDs). It works by stopping the release of   substances that cause allergy symptoms and inflammation. |
 | What medicines raise blood sugar? （什么药物会升高血糖？） | Some   medicines for conditions other than diabetes can raise your blood sugar   level. This is a concern when you have diabetes. Make sure every doctor you   see knows about all of the medicines, vitamins, or herbal supplements you   take. This means anything you take with or without a prescription. Examples include:     Barbiturates.     Thiazide diuretics.     Corticosteroids.     Birth control pills (oral contraceptives) and progesterone.     Catecholamines.     Decongestants that contain beta-adrenergic agents, such as pseudoephedrine.     The B vitamin niacin. The risk of high blood sugar from niacin lowers after you have taken it for a few months. The antipsychotic medicine olanzapine (Zyprexa). |
 
-### 3.2 数据准备 
+###  数据准备
 
 > **以** **[Medication QA](https://github.com/abachaa/Medication_QA_MedInfo2019)** **数据集为例**
 
@@ -389,7 +389,7 @@ python ./cli_demo.py
 | -------- | -------- | -------- | -------- | ---- | ---- |
 | aaa      | bbb      | ccc      | ddd      | eee  | fff  |
 
-#### 3.2.1 将数据转为 XTuner 的数据格式
+####  将数据转为 XTuner 的数据格式
 
 **目标格式：(.jsonL)**
 
@@ -457,7 +457,7 @@ python xlsx2jsonl.py
 
 此时，当然也可以对数据进行训练集和测试集的分割，同样可以让 ChatGPT 写 python 代码。当然如果你没有严格的科研需求、不在乎“训练集泄露”的问题，也可以不做训练集与测试集的分割。
 
-#### 3.2.2 划分训练集和测试集
+####  划分训练集和测试集
 
 ```text
 my .jsonL file looks like:
@@ -487,8 +487,7 @@ Step4, save the 7/10 part as train.jsonl. save the 3/10 part as test.jsonl
 
 生成的python代码见 [split2train_and_test.py](./split2train_and_test.py)
 
-
-### 3.3 开始自定义微调
+###  开始自定义微调
 
 此时，我们重新建一个文件夹来玩“微调自定义数据集”
 
@@ -514,7 +513,7 @@ cp ~/tutorial/xtuner/MedQA2019-structured-train.jsonl .
 
 
 
-#### 3.3.1 准备配置文件
+####  准备配置文件
 
 ```bash
 # 复制配置文件到当前目录
@@ -557,24 +556,23 @@ train_dataset = dict(
     pack_to_max_length=pack_to_max_length)
 ```
 
-#### 3.3.2 **XTuner！启动！**
+####  **XTuner！启动！**
 
 ```
 xtuner train internlm_chat_7b_qlora_medqa2019_e3.py --deepspeed deepspeed_zero2
 ```
 
-#### 3.3.3 pth 转 huggingface
+#### pth 转 huggingface
 
 同前述，这里不赘述了。[将得到的-pth-模型转换为-huggingface-模型即生成adapter文件夹](#236-将得到的-pth-模型转换为-huggingface-模型即生成adapter文件夹)  
 
-#### 3.3.4 部署与测试
+#### 部署与测试
 
 同前述。[部署与测试](#24-部署与测试)
 
+## 【补充】用 MS-Agent 数据集 赋予 LLM 以 Agent 能力
 
-## 4【补充】用 MS-Agent 数据集 赋予 LLM 以 Agent 能力
-
-### 4.1 概述
+###  概述
 
 MSAgent 数据集每条样本包含一个对话列表（conversations），其里面包含了 system、user、assistant 三种字段。其中：
 
@@ -586,9 +584,9 @@ MSAgent 数据集每条样本包含一个对话列表（conversations），其�
 
 一条调用网页搜索插件查询“上海明天天气”的数据样本示例如下图所示：
 
-### 4.2 微调步骤
+###  微调步骤
 
-#### 4.2.1 准备工作
+#### 准备工作
 
 > xtuner 是从国内的 ModelScope 平台下载 MS-Agent 数据集，因此不用提前手动下载数据集文件。
 
@@ -612,17 +610,17 @@ vim ./internlm_7b_qlora_msagent_react_e3_gpu8_copy.py
 + pretrained_model_name_or_path = './internlm-chat-7b'
 ```
 
-#### 4.2.2 开始微调
+####  开始微调
 
 ```Bash
 xtuner train ./internlm_7b_qlora_msagent_react_e3_gpu8_copy.py --deepspeed deepspeed_zero2
 ```
 
-### 4.3 直接使用
+###  直接使用
 
 > 由于 msagent 的训练非常费时，大家如果想尽快把这个教程跟完，可以直接从 modelScope 拉取咱们已经微调好了的 Adapter。如下演示。
 
-#### 4.3.1 下载 Adapter
+####  下载 Adapter
 
 ```Bash
 cd ~/ft-msagent
@@ -640,7 +638,7 @@ OK，现在目录应该长这样：
 
 有了这个在 msagent 上训练得到的Adapter，模型现在已经有 agent 能力了！就可以加 --lagent 以调用来自 lagent 的代理功能了！
 
-#### 4.3.2 添加 serper 环境变量
+#### 添加 serper 环境变量
 
 > **开始 chat 之前，还要加个 serper 的环境变量：**
 >
@@ -652,14 +650,13 @@ OK，现在目录应该长这样：
 export SERPER_API_KEY=abcdefg
 ```
 
-#### 4.3.3 xtuner + agent，启动！
+####  xtuner + agent，启动！
 
 ```bash
 xtuner chat ./internlm-chat-7b --adapter internlm-7b-qlora-msagent-react --lagent
 ```
 
-
-#### 4.3.4 报错处理
+#### 报错处理
 
 xtuner chat 增加 --lagent 参数后，报错 ```TypeError: transfomers.modelsauto.auto factory. BaseAutoModelClass.from pretrained() got multiple values for keyword argument "trust remote code"```	
 
@@ -671,7 +668,7 @@ vim /root/xtuner019/xtuner/xtuner/tools/chat.py
 
 - 问题：https://docs.qq.com/doc/DY1d2ZVFlbXlrUERj
 
-## 6 注意事项
+##  注意事项
 
 本教程使用 xtuner 0.1.9 版本
 
@@ -699,15 +696,266 @@ nvidia-cuda-nvrtc-cu12        12.1.105
 nvidia-cuda-runtime-cu12      12.1.105
 ```
 
-## 7 作业
+##  作业
 
-**基础作业：**
+### XTuner InternLM-Chat 个人小助手认知微调实践
+
+#### 微调环境准备
+
+```
+# InternStudio 平台中，从本地 clone 一个已有 pytorch 2.0.1 的环境（后续均在该环境执行，若为其他环境可作为参考）
+# 进入环境后首先 bash
+bash
+conda create --name personal_assistant --clone=/root/share/conda_envs/internlm-base
+# 如果在其他平台：
+# conda create --name personal_assistant python=3.10 -y
+
+# 激活环境
+conda activate personal_assistant
+# 进入家目录 （~的意思是 “当前用户的home路径”）
+cd ~
+# 创建版本文件夹并进入，以跟随本教程
+# personal_assistant用于存放本教程所使用的东西
+mkdir /root/personal_assistant && cd /root/personal_assistant
+mkdir /root/personal_assistant/xtuner019 && cd /root/personal_assistant/xtuner019
+
+# 拉取 0.1.9 的版本源码
+git clone -b v0.1.9  https://github.com/InternLM/xtuner
+# 无法访问github的用户请从 gitee 拉取:
+# git clone -b v0.1.9 https://gitee.com/Internlm/xtuner
+
+# 进入源码目录
+cd xtuner
+
+# 从源码安装 XTuner
+pip install -e '.[all]'
+```
+
+- 创建`data`文件夹用于存放用于训练的数据集
+
+```bash
+mkdir -p /root/personal_assistant/data && cd /root/personal_assistant/data
+```
+
+在`data`目录下创建一个json文件`personal_assistant.json`作为本次微调所使用的数据集。json中内容可参考下方(复制粘贴n次做数据增广，数据量小无法有效微调，下面仅用于展示格式，下面也有生成脚本)
+
+其中`conversation`表示一次对话的内容，`input`为输入，即用户会问的问题，`output`为输出，即想要模型回答的答案。
+
+```json
+[
+    {
+        "conversation": [
+            {
+                "input": "请介绍一下你自己",
+                "output": "我是小煤球，是孙小北的个人小助手，内在是上海AI实验室书生·浦语的7B大模型哦"
+            }
+        ]
+    },
+    {
+        "conversation": [
+            {
+                "input": "请做一下自我介绍",
+                "output": "我是小煤球，是孙小北的个人小助手，内在是上海AI实验室书生·浦语的7B大模型哦"
+            }
+        ]
+    }
+]
+```
+
+以下是一个python脚本，用于生成数据集。在`data`目录下新建一个generate_data.py文件，将以下代码复制进去，然后运行该脚本即可生成数据集。
+
+```python
+import json
+
+# 输入你的名字
+name = 'Shengshenlan'
+# 重复次数
+n = 10000
+
+data = [
+    {
+        "conversation": [
+            {
+                "input": "请做一下自我介绍",
+                "output": "我是{}的小助手，内在是上海AI实验室书生·浦语的7B大模型哦".format(name)
+            }
+        ]
+    }
+]
+
+for i in range(n):
+    data.append(data[0])
+
+with open('personal_assistant.json', 'w', encoding='utf-8') as f:
+    json.dump(data, f, ensure_ascii=False, indent=4)
+
+```
+
+#### 配置准备
+
+下载模型`InternLM-chat-7B`
+
+[InternStudio](https://studio.intern-ai.org.cn/) 平台的 `share` 目录下已经为我们准备了全系列的 `InternLM` 模型，可以使用如下命令复制`internlm-chat-7b`：
+
+```bash
+mkdir -p /root/personal_assistant/model/Shanghai_AI_Laboratory
+cp -r /root/share/temp/model_repos/internlm-chat-7b /root/personal_assistant/model/Shanghai_AI_Laboratory
+```
+
+XTuner 提供多个开箱即用的配置文件，用户可以通过下列命令查看：
+
+```bash
+# 列出所有内置配置
+xtuner list-cfg
+```
+
+
+
+```bash
+#创建用于存放配置的文件夹config并进入
+mkdir /root/personal_assistant/config && cd /root/personal_assistant/config
+```
+
+拷贝一个配置文件到当前目录：`xtuner copy-cfg ${CONFIG_NAME} ${SAVE_PATH}`
+在本例中：（注意最后有个英文句号，代表复制到当前路径）
+
+```bash
+xtuner copy-cfg internlm_chat_7b_qlora_oasst1_e3 .
+```
+
+修改拷贝后的文件internlm_chat_7b_qlora_oasst1_e3_copy.py，修改下述位置：
+(这是一份修改好的文件[internlm_chat_7b_qlora_oasst1_e3_copy.py](./internlm_chat_7b_qlora_oasst1_e3_copy.py))
+
+```bash
+# PART 1 中
+# 预训练模型存放的位置
+pretrained_model_name_or_path = '/root/personal_assistant/model/Shanghai_AI_Laboratory/internlm-chat-7b'
+
+# 微调数据存放的位置
+data_path = '/root/personal_assistant/data/personal_assistant.json'
+
+# 训练中最大的文本长度
+max_length = 512
+
+# 每一批训练样本的大小
+batch_size = 2
+
+# 最大训练轮数
+max_epochs = 3
+
+# 验证的频率
+evaluation_freq = 90
+
+# 用于评估输出内容的问题（用于评估的问题尽量与数据集的question保持一致）
+evaluation_inputs = [ '请介绍一下你自己', '请做一下自我介绍' ]
+
+
+# PART 3 中
+dataset=dict(type=load_dataset, path='json', data_files=dict(train=data_path))
+dataset_map_fn=None
+```
+
+#### 微调启动
+
+用`xtuner train`命令启动训练、
+
+```bash
+xtuner train /root/personal_assistant/config/internlm_chat_7b_qlora_oasst1_e3_copy.py
+```
+
+>会在训练完成后，输出用于验证的Sample output
+
+#### 微调后参数转换/合并
+
+训练后的pth格式参数转Hugging Face格式
+
+```bash
+# 创建用于存放Hugging Face格式参数的hf文件夹
+mkdir /root/personal_assistant/config/work_dirs/hf
+
+export MKL_SERVICE_FORCE_INTEL=1
+
+# 配置文件存放的位置
+export CONFIG_NAME_OR_PATH=/root/personal_assistant/config/internlm_chat_7b_qlora_oasst1_e3_copy.py
+
+# 模型训练后得到的pth格式参数存放的位置
+export PTH=/root/personal_assistant/config/work_dirs/internlm_chat_7b_qlora_oasst1_e3_copy/epoch_3.pth
+
+# pth文件转换为Hugging Face格式后参数存放的位置
+export SAVE_PATH=/root/personal_assistant/config/work_dirs/hf
+
+# 执行参数转换
+xtuner convert pth_to_hf $CONFIG_NAME_OR_PATH $PTH $SAVE_PATH
+```
+
+Merge模型参数
+
+```bash
+export MKL_SERVICE_FORCE_INTEL=1
+export MKL_THREADING_LAYER='GNU'
+
+# 原始模型参数存放的位置
+export NAME_OR_PATH_TO_LLM=/root/personal_assistant/model/Shanghai_AI_Laboratory/internlm-chat-7b
+
+# Hugging Face格式参数存放的位置
+export NAME_OR_PATH_TO_ADAPTER=/root/personal_assistant/config/work_dirs/hf
+
+# 最终Merge后的参数存放的位置
+mkdir /root/personal_assistant/config/work_dirs/hf_merge
+export SAVE_PATH=/root/personal_assistant/config/work_dirs/hf_merge
+
+# 执行参数Merge
+xtuner convert merge \
+    $NAME_OR_PATH_TO_LLM \
+    $NAME_OR_PATH_TO_ADAPTER \
+    $SAVE_PATH \
+    --max-shard-size 2GB
+```
+
+#### 网页DEMO
+
+安装网页Demo所需依赖
+
+```bash
+pip install streamlit==1.24.0
+```
+
+下载[InternLM](https://studio.intern-ai.org.cn/)项目代码（欢迎Star）
+
+```bash
+# 创建code文件夹用于存放InternLM项目代码
+mkdir /root/personal_assistant/code && cd /root/personal_assistant/code
+git clone https://github.com/InternLM/InternLM.git
+```
+
+将 `/root/code/InternLM/web_demo.py` 中 29 行和 33 行的模型路径更换为Merge后存放参数的路径 `/root/personal_assistant/config/work_dirs/hf_merge`
+
+运行 `/root/personal_assistant/code/InternLM` 目录下的 `web_demo.py` 文件，输入以下命令后，[**查看本教程5.2配置本地端口后**](https://github.com/InternLM/tutorial/blob/main/helloworld/hello_world.md#52-%E9%85%8D%E7%BD%AE%E6%9C%AC%E5%9C%B0%E7%AB%AF%E5%8F%A3)，将端口映射到本地。在本地浏览器输入 `http://127.0.0.1:6006` 即可。
+
+```
+streamlit run /root/personal_assistant/code/InternLM/web_demo.py --server.address 127.0.0.1 --server.port 6006
+```
+
+注意：要在浏览器打开 `http://127.0.0.1:6006` 页面后，模型才会加载。
+在加载完模型之后，就可以与微调后的 InternLM-Chat-7B 进行对话了
+
+
+
+### **基础作业完成：**
 
 构建数据集，使用 XTuner 微调 InternLM-Chat-7B 模型, 让模型学习到它是你的智能小助手，效果如下图所示，本作业训练出来的模型的输出需要**将不要葱姜蒜大佬**替换成自己名字或昵称！
 
-- 微调(五小时还没完成）：存储空间超了，不够用啊
+- 微调Demo(五小时还没完成）：存储空间超了，不够用啊
 
 ![image-20240119182916060](assets/HWDay04/image-20240119182916060.png)
+
+- 作业结果微调前
+
+![image-20240119192532238](assets/HWDay04/image-20240119192532238.png)
+
+- 微调后
+
+![image-20240119195756537](assets/HWDay04/image-20240119195756537.png)
 
 
 
