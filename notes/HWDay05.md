@@ -195,7 +195,66 @@ lmdeploy serve gradio http://0.0.0.0:23333 \
 	--restful_api True
 ```
 
+#### TurboMind 推理作为后端
 
+当然，Gradio 也可以直接和 TurboMind 连接，如下所示。
+
+```bash
+# Gradio+Turbomind(local)
+lmdeploy serve gradio ./workspace
+```
+
+可以直接启动 Gradio，此时没有 API Server，TurboMind 直接与 Gradio 通信。
+
+### TurboMind 推理 + Python 代码集成
+
+前面介绍的都是通过 API 或某种前端与”模型推理/服务“进行交互，lmdeploy 还支持 Python 直接与 TurboMind 进行交互，如下所示。
+
+```python
+from lmdeploy import turbomind as tm
+
+# load model
+model_path = "/root/share/temp/model_repos/internlm-chat-7b/"
+tm_model = tm.TurboMind.from_pretrained(model_path, model_name='internlm-chat-20b')
+generator = tm_model.create_instance()
+
+# process query
+query = "你好啊兄嘚"
+prompt = tm_model.model.get_prompt(query)
+input_ids = tm_model.tokenizer.encode(prompt)
+
+# inference
+for outputs in generator.stream_infer(
+        session_id=0,
+        input_ids=[input_ids]):
+    res, tokens = outputs[0]
+
+response = tm_model.tokenizer.decode(res.tolist())
+print(response)
+```
+
+在上面的代码中，我们首先加载模型，然后构造输入，最后执行推理。
+
+加载模型可以显式指定模型路径，也可以直接指定 Huggingface 的 repo_id，还可以使用上面生成过的 `workspace`。这里的 `tm.TurboMind` 其实是对 C++ TurboMind 的封装。
+
+构造输入这里主要是把用户的 query 构造成 InternLLM 支持的输入格式，比如上面的例子中， `query` 是“你好啊兄嘚”，构造好的 Prompt 如下所示。
+
+```python
+"""
+<|System|>:You are an AI assistant whose name is InternLM (书生·浦语).
+- InternLM (书生·浦语) is a conversational language model that is developed by Shanghai AI Laboratory (上海人工智能实验室). It is designed to be helpful, honest, and harmless.
+- InternLM (书生·浦语) can understand and communicate fluently in the language chosen by the user such as English and 中文.
+
+<|User|>:你好啊兄嘚
+<|Bot|>:
+"""
+```
+
+Prompt 其实就是增加了 `<|System|>` 消息和 `<|User|>` 消息（即用户的 `query`），以及一个 `<|Bot|>` 的标记，表示接下来该模型输出响应了。最终输出的响应内容如下所示。
+
+```python
+"你好啊，有什么我可以帮助你的吗？"
+```
 
 
 
@@ -223,4 +282,12 @@ lmdeploy serve gradio http://0.0.0.0:23333 \
 
 ### 进阶作业
 
-- 
+- 自我认知小助手模型使用 LMDeploy 量化部署
+
+```
+lmdeploy convert internlm-chat-7b  /root/personal_assistant/config/work_dirs/hf_merge/
+
+lmdeploy serve gradio ./workspace
+```
+
+![image-20240119221323749](assets/HWDay05/image-20240119221323749.png)
