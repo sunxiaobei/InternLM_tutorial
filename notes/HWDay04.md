@@ -696,11 +696,9 @@ nvidia-cuda-nvrtc-cu12        12.1.105
 nvidia-cuda-runtime-cu12      12.1.105
 ```
 
-##  作业
+## XTuner InternLM-Chat 个人小助手认知微调实践
 
-### XTuner InternLM-Chat 个人小助手认知微调实践
-
-#### 微调环境准备
+### 微调环境准备
 
 ```
 # InternStudio 平台中，从本地 clone 一个已有 pytorch 2.0.1 的环境（后续均在该环境执行，若为其他环境可作为参考）
@@ -791,7 +789,7 @@ with open('personal_assistant.json', 'w', encoding='utf-8') as f:
 
 ```
 
-#### 配置准备
+### 配置准备
 
 下载模型`InternLM-chat-7B`
 
@@ -855,7 +853,7 @@ dataset=dict(type=load_dataset, path='json', data_files=dict(train=data_path))
 dataset_map_fn=None
 ```
 
-#### 微调启动
+### 微调启动
 
 用`xtuner train`命令启动训练、
 
@@ -865,7 +863,7 @@ xtuner train /root/personal_assistant/config/internlm_chat_7b_qlora_oasst1_e3_co
 
 >会在训练完成后，输出用于验证的Sample output
 
-#### 微调后参数转换/合并
+### 微调后参数转换/合并
 
 训练后的pth格式参数转Hugging Face格式
 
@@ -912,7 +910,7 @@ xtuner convert merge \
     --max-shard-size 2GB
 ```
 
-#### 网页DEMO
+### 网页DEMO
 
 安装网页Demo所需依赖
 
@@ -939,9 +937,9 @@ streamlit run /root/personal_assistant/code/InternLM/web_demo.py --server.addres
 注意：要在浏览器打开 `http://127.0.0.1:6006` 页面后，模型才会加载。
 在加载完模型之后，就可以与微调后的 InternLM-Chat-7B 进行对话了
 
+## 作业
 
-
-### **基础作业完成：**
+### **基础作业：**
 
 构建数据集，使用 XTuner 微调 InternLM-Chat-7B 模型, 让模型学习到它是你的智能小助手，效果如下图所示，本作业训练出来的模型的输出需要**将不要葱姜蒜大佬**替换成自己名字或昵称！
 
@@ -957,9 +955,15 @@ streamlit run /root/personal_assistant/code/InternLM/web_demo.py --server.addres
 
 ![image-20240119195756537](assets/HWDay04/image-20240119195756537.png)
 
+![image-20240119203910980](assets/HWDay04/image-20240119203910980.png)
 
+- 界面报错（需要进入InternLM启动）
 
+![image-20240119205739755](assets/HWDay04/image-20240119205739755.png)
 
+- 完成
+
+![image-20240119212237469](assets/HWDay04/image-20240119212237469.png)
 
 **进阶作业：**
 
