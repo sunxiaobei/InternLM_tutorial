@@ -35,7 +35,6 @@
 
 <!-- END doctoc generated TOC please keep comment here to allow auto update -->
 
-
 ## 1 环境配置
 
 首先我们可以使用 `vgpu-smi ` 查看显卡资源使用情况。
@@ -65,7 +64,7 @@ $ conda create -n CONDA_ENV_NAME --clone /share/conda_envs/internlm-base
 ```
 
 - 如果clone操作过慢，可采用如下操作:
- 
+
 ```bash
 $ /root/share/install_conda_env_internlm_base.sh lmdeploy
 ```
