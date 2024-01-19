@@ -201,9 +201,26 @@ lmdeploy serve gradio http://0.0.0.0:23333 \
 
 ## 作业
 
+### 基础作业
+
 - 本地会话
 
 ![image-20240119214224115](assets/HWDay05/image-20240119214224115.png)
 
+- API服务（不知为啥咋突然飙英语了，多了个空格）
+
+![image-20240119214722235](assets/HWDay05/image-20240119214722235.png)
+
+- 去掉空格正常了
+
+![image-20240119214834731](assets/HWDay05/image-20240119214834731.png)
+
+- 网页Gradio
+
+![image-20240119215307928](assets/HWDay05/image-20240119215307928.png)
 
 
+
+### 进阶作业
+
+- 
