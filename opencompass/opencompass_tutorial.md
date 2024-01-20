@@ -312,7 +312,7 @@ python run.py --models hf_llama_7b --datasets base_medium
 ```
 
 OpenCompass 通常假定运行环境网络是可用的。如果您遇到网络问题或希望在离线环境中运行 OpenCompass，请参阅 [FAQ - 网络 - Q1](https://opencompass.readthedocs.io/zh-cn/latest/get_started/faq.html) 寻求解决方案。
- 
+
 
 ## 可视化评估结果
 
