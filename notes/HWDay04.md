@@ -961,11 +961,17 @@ streamlit run /root/personal_assistant/code/InternLM/web_demo.py --server.addres
 
 ![image-20240119205739755](assets/HWDay04/image-20240119205739755.png)
 
-- 完成
+- 调整后完成
 
 ![image-20240119212237469](assets/HWDay04/image-20240119212237469.png)
 
 **进阶作业：**
 
-- 将训练好的Adapter模型权重上传到 OpenXLab、Hugging Face 或者 MoelScope 任一一平台。
-- 将训练好后的模型应用部署到 OpenXLab 平台，参考部署文档请访问：https://aicarrier.feishu.cn/docx/MQH6dygcKolG37x0ekcc4oZhnCe
+- 将训练好的Adapter模型权重上传到 OpenXLab
+
+![image-20240120163503269](assets/HWDay04/image-20240120163503269.png)
+
+- 提个小建议：https://openxlab.org.cn/home  不适配360极速浏览器，乱掉了
+
+![image-20240120110036268](assets/HWDay04/image-20240120110036268.png)
+
