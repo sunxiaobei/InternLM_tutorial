@@ -931,10 +931,10 @@ git clone https://github.com/InternLM/InternLM.git
 运行 `/root/personal_assistant/code/InternLM` 目录下的 `web_demo.py` 文件，输入以下命令后，[**查看本教程5.2配置本地端口后**](https://github.com/InternLM/tutorial/blob/main/helloworld/hello_world.md#52-%E9%85%8D%E7%BD%AE%E6%9C%AC%E5%9C%B0%E7%AB%AF%E5%8F%A3)，将端口映射到本地。在本地浏览器输入 `http://127.0.0.1:6006` 即可。
 
 ```
-streamlit run /root/personal_assistant/code/InternLM/web_demo.py --server.address 127.0.0.1 --server.port 6006
+streamlit run /root/personal_assistant/code/InternLM/web_demo.py --server.address 127.0.0.1 --server.port 6066
 ```
 
-注意：要在浏览器打开 `http://127.0.0.1:6006` 页面后，模型才会加载。
+注意：要在浏览器打开 `http://127.0.0.1:6066` 页面后，模型才会加载。
 在加载完模型之后，就可以与微调后的 InternLM-Chat-7B 进行对话了
 
 ## 作业
