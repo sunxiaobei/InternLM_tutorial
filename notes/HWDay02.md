@@ -49,7 +49,7 @@ custom_channels:
   pytorch: https://mirrors.tuna.tsinghua.edu.cn/anaconda/cloud
 EOF
 
-source activate  ~/.condarc
+source  ~/.condarc
 ```
 
 - 配置环境
@@ -204,7 +204,7 @@ pip install -e . # 源码安装
 
 ```
 
-- 修改代码
+- 修改代码:`/root/code/lagent/examples/react_web_demo.py`
 
 ```
 import copy
@@ -505,9 +505,9 @@ git checkout 3e8c79051a1356b9c388a6447867355c0634932d  # 最好保证和教程�
 ```
 cd /root/code/InternLM-XComposer
 python examples/web_demo.py  \
-    --folder /root/model/Shanghai_AI_Laboratory/internlm-xcomposer-7b \
+    --folder /root/models/Shanghai_AI_Laboratory/internlm-xcomposer-7b \
     --num_gpus 1 \
-    --port 6006
+    --port 6066
 
 ```
 
@@ -559,4 +559,4 @@ hf_hub_download(repo_id="internlm/internlm-7b", filename="config.json")
 
 ![Alt text](imgs/internlm_xcomposer_7b_run.png)
 
-![Alt text](imgs/internlm_xcomposer_7b_running.png)
+![image-20240203162336761](assets/HWDay02/image-20240203162336761.png)

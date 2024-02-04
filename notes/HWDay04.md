@@ -965,7 +965,7 @@ streamlit run /root/personal_assistant/code/InternLM/web_demo.py --server.addres
 
 ![image-20240119212237469](assets/HWDay04/image-20240119212237469.png)
 
-**进阶作业：**
+### 进阶作业:
 
 - 将训练好的Adapter模型权重上传到 OpenXLab
 
