@@ -274,7 +274,7 @@ NPROC_PER_NODE=${GPU_NUM} xtuner train ./internlm_chat_7b_qlora_oasst1_e3_copy.p
 ```bash
 mkdir hf
 export MKL_SERVICE_FORCE_INTEL=1
-
+export MKL_THREADING_LAYER=GNU
 xtuner convert pth_to_hf ./internlm_chat_7b_qlora_oasst1_e3_copy.py ./work_dirs/internlm_chat_7b_qlora_oasst1_e3_copy/epoch_1.pth ./hf
 ```
 此时，路径中应该长这样：
@@ -427,7 +427,7 @@ python ./cli_demo.py
 }]
 ```
 
-🧠通过 pytho n脚本：将 `.xlsx` 中的 问题 和 回答 两列 提取出来，再放入 `.jsonL` 文件的每个 conversation 的 input 和 output 中。
+🧠通过 python 脚本：将 `.xlsx` 中的 问题 和 回答 两列 提取出来，再放入 `.jsonL` 文件的每个 conversation 的 input 和 output 中。
 
 > 这一步的 python 脚本可以请 ChatGPT 来完成。
 
