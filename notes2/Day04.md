@@ -1,7 +1,5 @@
 #  书生·浦语大模型实战营Day04微调
 
-
-
 ## 微调
 
 ### 为什么微调？
@@ -995,6 +993,8 @@ mkdir -p /root/demo/ft/huggingface
 # 模型转换
 # xtuner convert pth_to_hf ${配置文件地址} ${权重文件地址} ${转换后模型保存地址}
 xtuner convert pth_to_hf /root/demo/ft/train/internlm2_1_8b_qlora_alpaca_e3_copy.py /root/demo/ft/train/iter_960.pth /root/demo/ft/huggingface
+
+xtuner convert pth_to_hf /root/demo/ft/train/internlm2_1_8b_qlora_alpaca_e3_copy.py /root/demo/ft/train/iter_500.pth /root/demo/ft/huggingface
 ```
 
 ![image-20240415220227142](assets/Day04/image-20240415220227142.png)
@@ -1092,13 +1092,23 @@ xtuner convert merge /root/demo/ft/model /root/demo/ft/huggingface /root/demo/ft
 xtuner chat /root/demo/ft/final_model --prompt-template internlm2_chat
 ```
 
-我们可以通过一些简单的测试来看看微调后的模型的能力。
+- 线程冲突
+
+[2024-04-16 15:01:48,022] [INFO] [real_accelerator.py:191:get_accelerator] Setting ds_accelerator to cuda (auto detect)
+Error: mkl-service + Intel(R) MKL: MKL_THREADING_LAYER=INTEL is incompatible with libgomp.so.1 library.
+        Try to import numpy first or set the threading layer accordingly. Set MKL_SERVICE_FORCE_INTEL to force it.
+
+```
+# 解决一下线程冲突的 Bug 
+export MKL_SERVICE_FORCE_INTEL=1
+```
+
+- 运行结果
+- 通过一些简单的测试来看看微调后的模型的能力。
 
 > 假如我们想要输入内容需要在输入文字后敲击两下回车，假如我们想清楚历史记录需要输入 RESET，假如我们想要退出则需要输入 EXIT。
 
-```
-
-```
+![image-20240416151440069](assets/Day04/image-20240416151440069.png)
 
 可以看到模型已经严重过拟合，回复的话就只有 “我是剑锋大佬的小助手，内在是上海AI实验室书生·浦语的1.8B大模型哦” 这句话。我们下面可以通过对比原模型的能力来看看差异。
 
@@ -1107,11 +1117,9 @@ xtuner chat /root/demo/ft/final_model --prompt-template internlm2_chat
 xtuner chat /root/demo/ft/model --prompt-template internlm2_chat
 ```
 
-我们可以用同样的问题来查看回复的情况。
+- 可以用同样的问题来查看回复的情况。
 
-```
-
-```
+![image-20240416152215905](assets/Day04/image-20240416152215905.png)
 
 可以看到在没有进行我们数据的微调前，原模型是能够输出有逻辑的回复，并且也不会认为他是我们特有的小助手。因此我们可以很明显的看出两者之间的差异性。
 
@@ -1167,6 +1175,18 @@ cd /root/demo/ft/web_demo/InternLM
 ```
 
 将 `/root/demo/ft/web_demo/InternLM/chat/web_demo.py` 中的内容替换为以下的代码（与源代码相比，此处修改了模型路径和分词器路径，并且也删除了 avatar 及 system_prompt 部分的内容，同时与 cli 中的超参数进行了对齐）。
+
+```
+# 修改模型地址（第183行）
+- model = (AutoModelForCausalLM.from_pretrained('/root/demo/ft/final_model',
++ model = (AutoModelForCausalLM.from_pretrained('/root/demo/ft/model',
+
+# 修改分词器地址（第186行）
+- tokenizer = AutoTokenizer.from_pretrained('/root/demo/ft/final_model',
++ tokenizer = AutoTokenizer.from_pretrained('/root/demo/ft/model',
+```
+
+- 完整代码
 
 
 ```python
@@ -1352,10 +1372,10 @@ def on_btn_click():
 
 @st.cache_resource
 def load_model():
-    model = (AutoModelForCausalLM.from_pretrained('/root/ft/final_model',
+    model = (AutoModelForCausalLM.from_pretrained('/root/demo/ft/final_model',
                                                   trust_remote_code=True).to(
                                                       torch.bfloat16).cuda())
-    tokenizer = AutoTokenizer.from_pretrained('/root/ft/final_model',
+    tokenizer = AutoTokenizer.from_pretrained('/root/demo/ft/final_model',
                                               trust_remote_code=True)
     return model, tokenizer
 
@@ -1456,24 +1476,16 @@ if __name__ == '__main__':
     main()
 ```
 
-在运行前，我们还需要做的就是将端口映射到本地。那首先我们使用快捷键组合 `Windows + R`（Windows 即开始菜单键）打开指令界面，并输入命令，按下回车键。
+- 在运行前，还需要做的就是将端口映射到本地。那首先我们使用快捷键组合 `Windows + R`（Windows 即开始菜单键）打开指令界面，并输入命令，按下回车键。
 
 ```
-
+ssh -CNg -L 6006:127.0.0.1:6006 root@ssh.intern-ai.org.cn -p 40323
 ```
 
-需要在 PowerShell 中输入以下内容（需要替换为自己的端口号）
+- 需要输入以下命令运行 `/root/personal_assistant/code/InternLM` 目录下的 `web_demo.py` 文件。
 
 ```bash
-# 从本地使用 ssh 连接 studio 端口
-# 将下方端口号 38374 替换成自己的端口号
-ssh -CNg -L 6006:127.0.0.1:6006 root@ssh.intern-ai.org.cn -p 38374
-```
-
-之后我们需要输入以下命令运行 `/root/personal_assistant/code/InternLM` 目录下的 `web_demo.py` 文件。
-
-```bash
-streamlit run /root/ft/web_demo/InternLM/chat/web_demo.py --server.address 127.0.0.1 --server.port 6006
+streamlit run /root/demo/ft/web_demo/InternLM/chat/web_demo.py --server.address 127.0.0.1 --server.port 6006
 ```
 
 > 注意：要在浏览器打开 `http://127.0.0.1:6006` 页面后，模型才会加载。
@@ -1484,16 +1496,16 @@ streamlit run /root/ft/web_demo/InternLM/chat/web_demo.py --server.address 127.0
 
 效果图如下：
 
-假如我们还想和原来的 InternLM2-Chat-1.8B 模型对话（即在 `/root/ft/model` 这里的模型对话），我们其实只需要修改183行和186行的文件地址即可。
+假如我们还想和原来的 InternLM2-Chat-1.8B 模型对话（即在 `/root/demo/ft/model` 这里的模型对话），我们其实只需要修改183行和186行的文件地址即可。
 
 ```diff
 # 修改模型地址（第183行）
-- model = (AutoModelForCausalLM.from_pretrained('/root/ft/final_model',
-+ model = (AutoModelForCausalLM.from_pretrained('/root/ft/model',
+- model = (AutoModelForCausalLM.from_pretrained('/root/demo/ft/final_model',
++ model = (AutoModelForCausalLM.from_pretrained('/root/demo/ft/model',
 
 # 修改分词器地址（第186行）
-- tokenizer = AutoTokenizer.from_pretrained('/root/ft/final_model',
-+ tokenizer = AutoTokenizer.from_pretrained('/root/ft/model',
+- tokenizer = AutoTokenizer.from_pretrained('/root/demo/ft/final_model',
++ tokenizer = AutoTokenizer.from_pretrained('/root/demo/ft/model',
 ```
 
 然后使用上方同样的命令即可运行。
@@ -1502,7 +1514,15 @@ streamlit run /root/ft/web_demo/InternLM/chat/web_demo.py --server.address 127.0
 streamlit run /root/ft/web_demo/InternLM/chat/web_demo.py --server.address 127.0.0.1 --server.port 6006
 ```
 
-加载完成后输入同样的问题 `请介绍一下你自己` 之后我们可以看到两个模型截然不同的回复：
+加载完成后输入同样的问题 `请介绍一下你自己` 之后我们可以看到两个模型截然不同的回复
+
+- 微调后
+
+![image-20240416153706398](assets/Day04/image-20240416153706398.png)
+
+- 微调前
+
+![image-20240416154134488](assets/Day04/image-20240416154134488.png)
 
 
 
@@ -1510,15 +1530,11 @@ streamlit run /root/ft/web_demo/InternLM/chat/web_demo.py --server.address 127.0
 
 在这一小节里我们对微调后的模型（adapter）进行了转换及整合的操作，并通过 `xtuner chat` 来对模型进行了实际的对话测试。从结果可以清楚的看出模型的回复在微调的前后出现了明显的变化。那当我们在测试完模型认为其满足我们的需求后，我们就可以对模型进行量化部署等操作了，这部分的内容在之后关于 LMDeploy 的课程中将会详细的进行讲解，敬请期待后续的课程吧！
 
+
+
 ### 总结
 
 在本节中主要就是带领着大家跑通了 XTuner 的一个完整流程，通过了解数据集和模型的使用方法、配置文件的制作和训练以及最后的转换及整合。那在后面假如我们也有想要微调出自己的一个模型，我们也可以尝试使用同样流程和方法进行进一步的实践！
-
-
-
-
-
-
 
 
 
@@ -1538,17 +1554,21 @@ streamlit run /root/ft/web_demo/InternLM/chat/web_demo.py --server.address 127.0
 
 - 训练自己的小助手认知（记录复现过程并截图）
 
-
+![image-20240416153706398](assets/Day04/image-20240416153706398.png)
 
 
 
 ### 进阶作业
 
 - 将自我认知的模型上传到 OpenXLab，并将应用部署到 OpenXLab（优秀学员必做）
+
+https://openxlab.org.cn/models/detail/sunxiaobei/personal_assistant
+
 - 复现多模态微调（优秀学员必做）
 
 
-OpenXLab 部署教程：https://github.com/InternLM/Tutorial/tree/camp2/tools/openxlab-deploy
+
+
 
 
 
@@ -1557,4 +1577,6 @@ OpenXLab 部署教程：https://github.com/InternLM/Tutorial/tree/camp2/tools/op
 - 课程视频：https://www.bilibili.com/video/BV1Rc411b7ns
 - OpenXLab：https://studio.intern-ai.org.cn
 - 学习手册：https://kvudif1helh.feishu.cn/docx/Xx8hdqGwmopi5NxWxNWc76AOnPf
+
+- OpenXLab 部署教程：https://github.com/InternLM/Tutorial/tree/camp2/tools/openxlab-deploy
 
