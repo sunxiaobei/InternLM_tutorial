@@ -1553,6 +1553,7 @@ streamlit run /root/ft/web_demo/InternLM/chat/web_demo.py --server.address 127.0
 ### 基础作业（结营必做）
 
 - 训练自己的小助手认知（记录复现过程并截图）
+- 博客：[书生·浦语大模型实战营Day04个人助手微调](https://blog.csdn.net/scc1371815174/article/details/137844775)
 
 ![image-20240416153706398](assets/Day04/image-20240416153706398.png)
 
@@ -1561,10 +1562,18 @@ streamlit run /root/ft/web_demo/InternLM/chat/web_demo.py --server.address 127.0
 ### 进阶作业
 
 - 将自我认知的模型上传到 OpenXLab，并将应用部署到 OpenXLab（优秀学员必做）
+- 博客：[书生·浦语大模型实战营Day04OpenXLab 部署](https://blog.csdn.net/scc1371815174/article/details/137891263)
 
 https://openxlab.org.cn/models/detail/sunxiaobei/personal_assistant
 
+![image-20240417203515606](assets/Day04/image-20240417203515606.png)
+
+
+
 - 复现多模态微调（优秀学员必做）
+- 博客：[书生·浦语大模型实战营Day04XTuner多模态](https://blog.csdn.net/scc1371815174/article/details/137844335)
+
+
 
 
 
@@ -1577,6 +1586,6 @@ https://openxlab.org.cn/models/detail/sunxiaobei/personal_assistant
 - 课程视频：https://www.bilibili.com/video/BV1Rc411b7ns
 - OpenXLab：https://studio.intern-ai.org.cn
 - 学习手册：https://kvudif1helh.feishu.cn/docx/Xx8hdqGwmopi5NxWxNWc76AOnPf
-
 - OpenXLab 部署教程：https://github.com/InternLM/Tutorial/tree/camp2/tools/openxlab-deploy
+- 个人小站：[https://www.xiaowangyun.com](https://www.xiaowangyun.com)
 
